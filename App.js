@@ -1,10 +1,20 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+
+import AppLoading from 'expo-app-loading';
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
 
 import Login from './src/surfaces/Login';
 import Feed from './src/surfaces/Feed';
@@ -18,7 +28,33 @@ const Tab = createBottomTabNavigator();
 
 function Home() {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === 'Feed') iconName = focused ? 'home' : 'home-outline';
+          else if (route.name === 'Conversations') iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+          else if (route.name === 'AddPost') iconName = focused ? 'add-circle' : 'add-circle-outline';
+          else if (route.name === 'Favorites') iconName = focused ? 'heart' : 'heart-outline';
+          else if (route.name === 'Profile') iconName = focused ? 'person-circle' : 'person-circle-outline';
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+
+        tabBarActiveTintColor: '#2A5B84',
+        tabBarInactiveTintColor: '#707070',
+
+        headerShown: true,
+        headerTransparent: true,
+        headerTitleAlign: 'right',
+        headerTitleStyle: {
+          paddingTop: 10,
+          paddingHorizontal: 40,
+          textAlign: 'left',
+          fontWeight: 'bold',
+          
+        },
+      })}
+    >
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen name="Conversations" component={Conversations} />
       <Tab.Screen name="AddPost" component={AddPost} />
@@ -28,11 +64,21 @@ function Home() {
   );
 }
 
+
 export default function App() {
   const [userLoggedIn] = useState(true);
 
+  const [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <SafeAreaProvider>
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator>
@@ -47,6 +93,6 @@ export default function App() {
           )}
         </Stack.Navigator>
       </NavigationContainer>
-    </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }
