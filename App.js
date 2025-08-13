@@ -6,7 +6,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-// Surfaces
 import Login from './src/surfaces/Login';
 import Feed from './src/surfaces/Feed';
 import Conversations from './src/surfaces/Conversations';
@@ -17,7 +16,6 @@ import Profile from './src/surfaces/Profile';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-// Le Home = les 5 onglets en bas (comme sur la slide)
 function Home() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>
@@ -31,7 +29,6 @@ function Home() {
 }
 
 export default function App() {
-  // Le prof laisse souvent un useState(true) au début
   const [userLoggedIn] = useState(true);
 
   return (
