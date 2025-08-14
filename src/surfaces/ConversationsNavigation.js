@@ -2,8 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Conversations } from './Conversations';
-import Messages from './Messages';
-
+import { Messages } from './Messages';
 const Stack = createStackNavigator();
 
 export const ConversationsNavigation = () => {
