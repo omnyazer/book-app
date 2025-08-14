@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ListOfFavorites from "../components/ListOfFavorites";
 import { Text, View } from "react-native";
 
+
 export default function Favorites() {
   const headerHeight = useHeaderHeight();
 

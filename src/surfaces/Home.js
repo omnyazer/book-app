@@ -1,18 +1,16 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 import Feed from './Feed';
 import Profile from './Profile';
 import Favorites from './Favorites';
 import AddPost from './AddPost';
-
-import Ionicons from '@expo/vector-icons/Ionicons';
 import { colors } from '../styles/colors';
-import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
-
 const ConversationsBase = () => <View style={{ flex: 1 }} />;
 
 export const Home = () => {
@@ -20,7 +18,7 @@ export const Home = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
+          let iconName = 'ellipse';
 
           if (route.name === 'Feed') {
             iconName = focused ? 'home' : 'home-outline';
@@ -35,26 +33,18 @@ export const Home = () => {
         tabBarActiveTintColor: colors.accentStroke,
         tabBarInactiveTintColor: colors.black,
         headerShown: false,
-        headerTransparent: true,
-        headerTitleAlign: 'left',
-        headerStyle: { height: 160 },
-        headerTitleStyle: {
-          textAlign: 'left',
-          fontWeight: 'bold',
-          fontFamily: 'Poppins_700Bold',
-          fontSize: 24,
-        },
       })}
     >
       <Tab.Screen name="Feed" component={Feed} />
 
       <Tab.Screen
-        name="Conversations"
+        name="ConversationsMain"
         component={ConversationsBase}
         options={{
-          tabBarIcon: ({ size }) => (
-            <Ionicons name="chatbox-outline" color="#000000" size={size} />
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="chatbox-outline" size={size} color={color ?? colors.black} />
           ),
+          title: 'Conversations',
         }}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
@@ -69,30 +59,31 @@ export const Home = () => {
         component={AddPost}
         options={{
           tabBarIcon: ({ size }) => (
-            <View style={{ marginTop: -30 }}>
-              <View
-                style={{
-                  position: 'absolute',
-                  backgroundColor: '#000000',
-                  padding: 30,
-                  bottom: -10,
-                  left: -13,
-                  borderRadius: 23,
-                  transform: [{ rotate: '-.45deg' }],
-                  shadowColor: '#000000',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.2,
-                  shadowRadius: 4,
-                }}
-              />
-              <Ionicons name="add-circle-outline" color="#ffffff" size={36} />
+            <View
+              style={{
+                marginTop: -30,
+                width: size + 26,
+                height: size + 26,
+                borderRadius: (size + 26) / 2,
+                backgroundColor: colors.black,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Ionicons name="add" size={22} color="#FFFFFF" />
             </View>
           ),
+          title: 'AddPost',
         }}
       />
 
       <Tab.Screen name="Favorites" component={Favorites} />
-      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{ headerShown: false }}
+      />
     </Tab.Navigator>
   );
 };

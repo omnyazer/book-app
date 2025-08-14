@@ -3,6 +3,7 @@ import { View, Image } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ListOfMessages } from '../components/ListOfMessages';
+
 export const Messages = ({ route }) => {
   const headerHeight = useHeaderHeight();
 

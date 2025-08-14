@@ -1,13 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Image, FlatList } from 'react-native';
+import { requestBase } from '../constants';
 
-const ListOfCards = () => {
-  const images = [
-    { id: '101', url: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=900&q=80' },
-    { id: '102', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80' },
-    { id: '103', url: 'https://images.unsplash.com/photo-1504198266285-165a3c78fa4e?w=900&q=80' },
-    { id: '104', url: 'https://images.unsplash.com/photo-1541698444083-023c97d3f4b6?w=900&q=80' },
-  ];
+export default function ListOfCards() {
+  const [cardList, setCardList] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`${requestBase}/home.json`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        setCardList(json?.favorites ?? []); // le json du TP a un tableau "favorites"
+      } catch (e) {
+        console.warn('Failed to fetch home.json:', e?.message);
+        // petit fallback pour afficher qlq images
+        setCardList([
+          { id: 'f1', url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=80' },
+          { id: 'f2', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80' },
+        ]);
+      }
+    })();
+  }, []);
 
   const renderItem = ({ item }) => (
     <Image
@@ -16,16 +30,16 @@ const ListOfCards = () => {
     />
   );
 
+  if (!cardList) return null;
+
   return (
-    <View style={{ paddingVertical: 30 }}>
+    <View style={{ paddingVertical: 10 }}>
       <FlatList
-        data={images}
+        data={cardList}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(it) => String(it.id)}
         showsVerticalScrollIndicator={false}
       />
     </View>
   );
-};
-
-export default ListOfCards;  
+}

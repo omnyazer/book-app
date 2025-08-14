@@ -5,6 +5,7 @@ import { ProfileStatistics } from '../components/ProfileStatistics';
 import { AddedImages } from '../components/AddedImages';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
 export default function Profile() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
