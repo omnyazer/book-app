@@ -1,10 +1,86 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, TextInput } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function Conversations() {
+import { colors } from '../styles/colors';
+import ListOfConvos from '../components/ListOfConvos';
+
+export const Conversations = ({ navigation }) => {
+  const headerHeight = useHeaderHeight();
+  const [text, onChangeText] = React.useState('');
+
   return (
-    <View>
-      <Text>this will be the chat screen</Text>
-    </View>
+    <SafeAreaView style={{ flex: 1, paddingTop: headerHeight + 30 }}>
+      <View
+        style={{
+          width: 650,
+          height: 570,
+          borderRadius: 155,
+          borderWidth: 1,
+          borderColor: colors.accentLines,
+          position: 'absolute',
+          top: 210,
+          left: -160,
+          transform: [{ rotate: '-45deg' }],
+        }}
+      />
+      <View
+        style={{
+          width: 650,
+          height: 570,
+          borderRadius: 155,
+          borderWidth: 1,
+          borderColor: colors.accentLines,
+          position: 'absolute',
+          top: 280,
+          left: -160,
+          transform: [{ rotate: '-45deg' }],
+        }}
+      />
+      <View
+        style={{
+          width: 650,
+          height: 570,
+          borderRadius: 155,
+          position: 'absolute',
+          top: 350,
+          left: -160,
+          backgroundColor: colors.mainTheme, 
+          transform: [{ rotate: '-45deg' }],
+        }}
+      />
+
+      <View style={{ marginHorizontal: 30, position: 'relative' }}>
+        <View>
+          <TextInput
+            style={{
+              fontSize: 14,
+              paddingVertical: 12,
+              paddingLeft: 40,
+              marginHorizontal: 17,
+              borderRadius: 15,
+              backgroundColor: colors.white,
+              shadowColor: '#000000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.1,
+              shadowRadius: 9,
+            }}
+            onChangeText={onChangeText}
+            value={text}
+            placeholder="search contacts"
+          />
+          <Ionicons
+            name="search"
+            size={24}
+            color={colors.black}
+            style={{ position: 'absolute', left: 28, top: 6 }}
+          />
+        </View>
+      </View>
+
+      <ListOfConvos navigation={navigation} />
+    </SafeAreaView>
   );
-}
+};
