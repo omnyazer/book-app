@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "conversationId": 1,
+    "messages": [
+      { "id": 1, "text": "Hey, how’s it going?", "type": "from" },
+      { "id": 2, "text": "Pretty good! You?", "type": "to" },
+      { "id": 3, "text": "All good. Free tonight?", "type": "from" },
+      { "id": 4, "text": "Yep, let’s do it 🙌", "type": "to" }
+    ]
+  },
+  {
+    "id": 2,
+    "conversationId": 2,
+    "messages": [
+      { "id": 1, "text": "Yo, are you going to the wedding?", "type": "from" },
+      { "id": 2, "text": "I think so. What time is it?", "type": "to" },
+      { "id": 3, "text": "Ceremony at 4pm, party at 7pm!", "type": "from" }
+    ]
+  },
+  {
+    "id": 3,
+    "conversationId": 3,
+    "messages": [
+      { "id": 1, "text": "Seriously! I’m not even playing!", "type": "from" },
+      { "id": 2, "text": "😂😂😂", "type": "to" }
+    ]
+  },
+  {
+    "id": 4,
+    "conversationId": 4,
+    "messages": [
+      { "id": 1, "text": "…and then guess what happened…", "type": "from" },
+      { "id": 2, "text": "he started crying…!", "type": "from" },
+      { "id": 3, "text": "no way 😳", "type": "to" }
+    ]
+  },
+  {
+    "id": 5,
+    "conversationId": 5,
+    "messages": [
+      { "id": 1, "text": "Quick sync in 10?", "type": "from" },
+      { "id": 2, "text": "Give me 5 min ☕️", "type": "to" }
+    ]
+  }
+]

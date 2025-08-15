@@ -1,0 +1,7 @@
+[
+  { "id": 1, "userId": 2, "text": "Hey, how's it going?" },
+  { "id": 2, "userId": 3, "text": "Yo, are you going to the wedding?" },
+  { "id": 3, "userId": 4, "text": "seriously! i'm not even playing!" },
+  { "id": 4, "userId": 5, "text": "and then guess what happened.. he started crying...!" },
+  { "id": 5, "userId": 1, "text": "Quick sync in 10?" }
+]

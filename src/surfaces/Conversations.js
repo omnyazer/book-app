@@ -1,87 +1,95 @@
 import React from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-
 import { colors } from '../styles/colors';
 import ListOfConvos from '../components/ListOfConvos';
 
-export const Conversations = ({ navigation }) => {
+export default function Conversations({ navigation }) {
   const headerHeight = useHeaderHeight();
   const [text, onChangeText] = React.useState('');
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: headerHeight + 30 }}>
-      <View
-        style={{
-          width: 650,
-          height: 570,
-          borderRadius: 155,
-          borderWidth: 1,
-          borderColor: colors.accentLines,
-          position: 'absolute',
-          top: 210,
-          left: -160,
-          transform: [{ rotate: '-45deg' }],
-        }}
-      />
-      <View
-        style={{
-          width: 650,
-          height: 570,
-          borderRadius: 155,
-          borderWidth: 1,
-          borderColor: colors.accentLines,
-          position: 'absolute',
-          top: 280,
-          left: -160,
-          transform: [{ rotate: '-45deg' }],
-        }}
-      />
-      <View
-        style={{
-          width: 650,
-          height: 570,
-          borderRadius: 155,
-          position: 'absolute',
-          top: 350,
-          left: -160,
-          backgroundColor: colors.mainTheme, 
-          transform: [{ rotate: '-45deg' }],
-        }}
-      />
+    <SafeAreaView style={[styles.container, { paddingTop: headerHeight + 30 }]}>
+      <View style={styles.bgShapeOne} />
+      <View style={styles.bgShapeTwo} />
+      <View style={styles.bgShapeThree} />
 
-      <View style={{ marginHorizontal: 30, position: 'relative' }}>
-        <View>
-          <TextInput
-            style={{
-              fontSize: 14,
-              paddingVertical: 12,
-              paddingLeft: 40,
-              marginHorizontal: 17,
-              borderRadius: 15,
-              backgroundColor: colors.white,
-              shadowColor: '#000000',
-              shadowOffset: { width: 0, height: 4 },
-              shadowOpacity: 0.1,
-              shadowRadius: 9,
-            }}
-            onChangeText={onChangeText}
-            value={text}
-            placeholder="search contacts"
-          />
-          <Ionicons
-            name="search"
-            size={24}
-            color={colors.black}
-            style={{ position: 'absolute', left: 28, top: 6 }}
-          />
-        </View>
+      <View style={styles.searchWrap}>
+        <TextInput
+          style={styles.searchInput}
+          value={text}
+          onChangeText={onChangeText}
+          placeholder="search contacts"
+        />
+        <Ionicons name="search" size={24} color={colors.black} style={styles.searchIcon} />
       </View>
 
       <ListOfConvos navigation={navigation} />
     </SafeAreaView>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: colors.white },
+
+  bgShapeOne: {
+    width: 650,
+    height: 570,
+    borderRadius: 155,
+    borderWidth: 1,
+    borderColor: colors.accentLines,
+    position: 'absolute',
+    top: 120,
+    left: -160,
+    transform: [{ rotate: '-45deg' }],
+  },
+  bgShapeTwo: {
+    width: 650,
+    height: 570,
+    borderRadius: 155,
+    borderWidth: 1,
+    borderColor: colors.accentLines,
+    position: 'absolute',
+    top: 200,
+    left: -160,
+    transform: [{ rotate: '-45deg' }],
+  },
+  bgShapeThree: {
+    width: 650,
+    height: 570,
+    borderRadius: 155,
+    borderWidth: 1,
+    borderColor: colors.accentLines,
+    position: 'absolute',
+    top: 350,
+    left: -160,
+    backgroundColor: '#F1F6F4', 
+    transform: [{ rotate: '-45deg' }],
+  },
+
+  searchWrap: {
+    marginHorizontal: 30,
+    position: 'relative',
+  },
+  searchInput: {
+    fontSize: 14,
+    paddingVertical: 12,
+    paddingLeft: 40, 
+    marginHorizontal: 17,
+    borderRadius: 15,
+    backgroundColor: colors.white,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 9,
+    elevation: 4,
+  },
+  searchIcon: {
+    position: 'absolute',
+    left: 28,
+    top: 6,
+  },
+});

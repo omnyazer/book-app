@@ -8,8 +8,7 @@ import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-font
 
 import Login from './src/surfaces/Login';
 import { Home } from './src/surfaces/Home';
-import { ConversationsNavigation } from './src/surfaces/ConversationsNavigation';
-
+import ConversationsNavigation from './src/surfaces/ConversationsNavigation';
 import { requestBase } from './src/constants';   
 import { UserListContext } from './src/context';
 

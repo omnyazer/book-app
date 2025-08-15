@@ -1,4 +1,3 @@
-// src/components/ListOfAvatars.js
 import React from 'react';
 import { View, FlatList, Pressable, Image } from 'react-native';
 import { UserListContext } from '../context';
@@ -14,10 +13,9 @@ const FALLBACK = [
 export default function ListOfAvatars() {
   const { userList } = React.useContext(UserListContext);
 
-  // si userList est vide/undefined -> on prend FALLBACK
   const data =
     Array.isArray(userList) && userList.length > 0
-      ? userList.slice(0, 6) // 4–6 items comme sur la slide
+      ? userList.slice(0, 6) 
       : FALLBACK;
 
   const renderItem = ({ item }) => (

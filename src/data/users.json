@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "name": "Malena Tudi",
+    "url": "https://raw.githubusercontent.com/PacktPublishing/Simplifying-State-Management-in-React-Native/main/chapter-4/assets/avatars/1.png"
+  },
+  {
+    "id": 2,
+    "name": "Jakob Curtis",
+    "url": "https://randomuser.me/api/portraits/women/1.jpg"
+  },
+  {
+    "id": 3,
+    "name": "Charlie Kelly",
+    "url": "https://raw.githubusercontent.com/PacktPublishing/Simplifying-State-Management-in-React-Native/main/chapter-4/assets/avatars/3.png"
+  },
+  {
+    "id": 4,
+    "name": "Minna Amigon",
+    "url": "https://raw.githubusercontent.com/PacktPublishing/Simplifying-State-Management-in-React-Native/main/chapter-4/assets/avatars/4.png"
+  },
+  {
+    "id": 5,
+    "name": "Donette Foller",
+    "url": "https://raw.githubusercontent.com/PacktPublishing/Simplifying-State-Management-in-React-Native/main/chapter-4/assets/avatars/5.png"
+  }
+]

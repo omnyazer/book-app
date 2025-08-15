@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   FlatList,
   View,
@@ -7,64 +7,35 @@ import {
   Pressable,
   StyleSheet,
 } from 'react-native';
-
-const userList = [
-  {
-    id: 1,
-    name: 'Malena Tudi',
-    url: 'https://randomuser.me/api/portraits/women/1.jpg',
-  },
-  {
-    id: 2,
-    name: 'Jakob Curtis',
-    url: 'https://randomuser.me/api/portraits/men/2.jpg',
-  },
-  {
-    id: 3,
-    name: 'Charlie Kelly',
-    url: 'https://randomuser.me/api/portraits/men/3.jpg',
-  },
-  {
-    id: 4,
-    name: 'Minna Amigon',
-    url: 'https://randomuser.me/api/portraits/women/4.jpg',
-  },
-  {
-    id: 5,
-    name: 'Donette Foller',
-    url: 'https://randomuser.me/api/portraits/women/5.jpg',
-  },
-];
-
-const conversationsList = [
-  { id: 1, userId: 2, text: "Hey, how's it going?" },
-  { id: 2, userId: 3, text: 'Yo, are you going to the wedding?' },
-  { id: 3, userId: 4, text: "seriously! i'm not even playing!" },
-  { id: 4, userId: 5, text: "and then guess what happened.. he started crying...!" },
-  { id: 5, userId: 1, text: 'Hi! Did you see my last message?' }, 
-];
-
+import conversations from '../data/conversations.json';
+import users from '../data/users.json';
+import { ConversationContext } from '../context';
 
 export default function ListOfConvos({ navigation }) {
+  const { setConversationId } = useContext(ConversationContext);
+
+  const onPressItem = (conv) => {
+    const user = users.find(u => String(u.id) === String(conv.userId));
+    setConversationId(conv.id);
+    navigation.navigate('Messages', {
+      name: user?.name ?? 'Conversation',
+      avatar: user?.url,
+    });
+  };
+
   const renderItem = ({ item }) => {
-    const currentUser = userList.filter((user) => user.id === item.userId);
+    const user = users.find(u => String(u.id) === String(item.userId));
 
     return (
-      <Pressable
-        onPress={() =>
-          navigation.navigate('Messages', {
-            name: currentUser[0].name,
-            avatar: currentUser[0].url,
-          })
-        }
-        style={styles.row}
-      >
+      <Pressable onPress={() => onPressItem(item)} style={styles.row}>
         <View style={styles.avatarWrap}>
-          <Image style={styles.avatar} source={{ uri: currentUser[0].url }} />
+          {!!user?.url && (
+            <Image style={styles.avatar} source={{ uri: user.url }} />
+          )}
         </View>
 
-        <View style={{ fontSize: 14, paddingBottom: 9 }}>
-          <Text style={styles.name}>{currentUser[0].name}</Text>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.name}>{user?.name ?? '—'}</Text>
           <Text style={styles.last} numberOfLines={2}>
             {item.text}
           </Text>
@@ -74,20 +45,22 @@ export default function ListOfConvos({ navigation }) {
   };
 
   return (
-    <View style={{ paddingTop: 30, marginTop: -30, marginBottom: 56 }}>
-      <FlatList
-        data={conversationsList}
-        renderItem={renderItem}
-        keyExtractor={(item) => String(item.id)}
-        showsVerticalScrollIndicator={false}
-        decelerationRate="fast"
-        ListHeaderComponent={<View style={{ height: 30 }} />}
-      />
-    </View>
+    <FlatList
+      data={conversations}
+      keyExtractor={(it) => String(it.id)}
+      renderItem={renderItem}
+      contentContainerStyle={styles.listContent}
+      showsVerticalScrollIndicator={false}
+    />
   );
 }
 
 const styles = StyleSheet.create({
+  listContent: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+    paddingBottom: 40,
+  },
   row: {
     height: 103,
     backgroundColor: 'rgba(255,255,255,0.6)',
@@ -106,13 +79,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 17,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   avatar: {
     width: 61,
     height: 61,
     borderRadius: 35,
-    marginTop: 2,
-    marginLeft: 2,
   },
   name: {
     fontSize: 16,
@@ -122,7 +95,7 @@ const styles = StyleSheet.create({
   },
   last: {
     color: '#656565',
-    width: '65%',
+    width: '90%',
     fontSize: 13,
     lineHeight: 18,
   },

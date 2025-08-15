@@ -1,77 +1,64 @@
 import React from 'react';
 import { View, FlatList, Text, StyleSheet } from 'react-native';
+import messagesData from '../data/messages.json';
 
-export const ListOfMessages = () => {
-  const messages = {
-    id: 2,
-    messages: [
-      {
-        id: 1,
-        type: 'to',
-        text:
-          "Well, let me start by saying, for those of you who might be confused, I am not Ben Johnson. On the train ride from DC this morning, we passed through Baltimore",
-      },
-      {
-        id: 2,
-        type: 'from',
-        text:
-          'After the 2000 census, Representative Davis maneuvered to have his Congressional District gerrymandered to include as many Republicans as possible',
-      },
-      {
-        id: 3,
-        type: 'from',
-        text:
-          "Genetically advanced agriculture, anti-aging technology, and other advancements we've yet to see today will likely push our longevity even farther",
-      },
-      {
-        id: 4,
-        type: 'to',
-        text:
-          "It shouldn't be surprising, then, that many of the biggest proponents of banning performance enhancing drugs in sports are also suspect of some The Rosenkranz Foundation",
-      },
-    ],
+export const ListOfMessages = ({ conversationId }) => {
+  const convo = messagesData.find(m => m.conversationId === conversationId);
+  const messages = convo ? convo.messages : [];
+
+  const renderItem = ({ item }) => {
+    const isFromMe = item.type === 'from';
+    return (
+      <View
+        style={[
+          styles.row,
+          { justifyContent: isFromMe ? 'flex-end' : 'flex-start' },
+        ]}
+      >
+        <View style={[styles.bubble, isFromMe ? styles.me : styles.them]}>
+          <Text style={[styles.text, isFromMe ? styles.meText : styles.themText]}>
+            {item.text}
+          </Text>
+        </View>
+      </View>
+    );
   };
 
-  const renderItem = ({ item }) => (
-    <View
-      style={[
-        styles.text,
-        item.type === 'from' ? styles.textTo : styles.textFrom,
-      ]}
-    >
-      <Text>{item.text}</Text>
-    </View>
-  );
-
   return (
-    <View style={{ paddingHorizontal: 20 }}>
-      <FlatList
-        data={messages.messages}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        inverted
-      />
-    </View>
+    <FlatList
+      data={messages}
+      renderItem={renderItem}
+      keyExtractor={(it) => String(it.id)}
+      contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    />
   );
 };
 
 const styles = StyleSheet.create({
+  row: {
+    width: '100%',
+    marginBottom: 12,
+    flexDirection: 'row',
+  },
+  bubble: {
+    maxWidth: '78%',
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+  },
+  me: {
+    backgroundColor: '#000',
+    borderTopRightRadius: 6,
+  },
+  them: {
+    backgroundColor: '#F4FAFA',
+    borderTopLeftRadius: 6,
+  },
   text: {
-    backgroundColor: '#FAFAFA',
-    borderBottomRightRadius: 20,
-    borderBottomLeftRadius: 20,
     fontSize: 14,
-    padding: 10,
-    maxWidth: '65%',
-    marginVertical: 14,
+    lineHeight: 20,
   },
-  textFrom: {
-    borderTopLeftRadius: 20,
-    alignSelf: 'flex-end',
-  },
-  textTo: {
-    borderTopRightRadius: 20,
-    alignSelf: 'flex-start',
-  },
+  meText: { color: '#FFFFFF' },
+  themText: { color: '#000000' },
 });
