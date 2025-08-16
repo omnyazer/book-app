@@ -1,8 +1,10 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
+import { fetchLikedImages } from '../store/likedImages';
 
 import Feed from './Feed';
 import Profile from './Profile';
@@ -14,6 +16,13 @@ const Tab = createBottomTabNavigator();
 const ConversationsBase = () => <View style={{ flex: 1 }} />;
 
 export const Home = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchLikedImages());
+  }, [dispatch]);
+
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -78,12 +87,7 @@ export const Home = () => {
       />
 
       <Tab.Screen name="Favorites" component={Favorites} />
-
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{ headerShown: false }}
-      />
+      <Tab.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };

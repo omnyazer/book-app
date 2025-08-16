@@ -4,22 +4,22 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { useFonts, Poppins_400Regular, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_700Bold,
+} from '@expo-google-fonts/poppins';
+import { Provider } from 'react-redux';
 
+import store from './src/store';
 import Login from './src/surfaces/Login';
 import { Home } from './src/surfaces/Home';
 import ConversationsNavigation from './src/surfaces/ConversationsNavigation';
-import { requestBase } from './src/constants';   
+import UserDetailsModal from './src/surfaces/UserDetailsModal'; 
+import { requestBase } from './src/constants';
 import { UserListContext } from './src/context';
 
 const Stack = createStackNavigator();
-
-const FALLBACK_USERS = [
-  { id: 1, name: 'Jakob Curtis', url: 'https://randomuser.me/api/portraits/men/11.jpg' },
-  { id: 2, name: 'Charlie Kelly', url: 'https://randomuser.me/api/portraits/men/32.jpg' },
-  { id: 3, name: 'Minna Amigon', url: 'https://randomuser.me/api/portraits/women/22.jpg' },
-  { id: 4, name: 'Donette Foller', url: 'https://randomuser.me/api/portraits/men/45.jpg' },
-];
 
 export default function App() {
   const [userLoggedIn] = useState(true);
@@ -41,7 +41,7 @@ export default function App() {
         if (!cancelled) setUserList(json);
       } catch (e) {
         console.warn('Failed to fetch users.json:', e?.message || e);
-        if (!cancelled) setUserList(FALLBACK_USERS);
+        if (!cancelled) setUserList([]);
       }
     }
 
@@ -61,28 +61,37 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <UserListContext.Provider value={{ userList }}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {!userLoggedIn ? (
-              <Stack.Screen name="Login" component={Login} />
-            ) : (
-              <>
-                <Stack.Screen
-                  name="Home"
-                  component={Home}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="ConversationsNav"
-                  component={ConversationsNavigation}
-                  options={{ headerShown: false }}
-                />
-              </>
-            )}
-          </Stack.Navigator>
-        </NavigationContainer>
-      </UserListContext.Provider>
+      <Provider store={store}>
+        <UserListContext.Provider value={{ userList }}>
+          <NavigationContainer>
+            <Stack.Navigator>
+              {!userLoggedIn ? (
+                <Stack.Screen name="Login" component={Login} />
+              ) : (
+                <>
+                  <Stack.Screen
+                    name="Home"
+                    component={Home}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="ConversationsNav"
+                    component={ConversationsNavigation}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Group screenOptions={{ presentation: 'modal' }}>
+                    <Stack.Screen
+                      name="UserDetailsModal"
+                      component={UserDetailsModal}
+                      options={{ headerShown: false }}
+                    />
+                  </Stack.Group>
+                </>
+              )}
+            </Stack.Navigator>
+          </NavigationContainer>
+        </UserListContext.Provider>
+      </Provider>
     </SafeAreaProvider>
   );
 }

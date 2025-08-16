@@ -1,35 +1,51 @@
-import React from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
+import React, { useMemo } from 'react';
+import { View, FlatList } from 'react-native';
+import Card from './Card';
 
-export default function ListOfCards() {
-  const cardList = [
-    { id: 'f1', url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=900&q=80' },
-    { id: 'f2', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=900&q=80' },
-    { id: 'f3', url: 'https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?w=900&q=80' },
-  ];
+const FALLBACK = [
+  {
+    id: '1',
+    image:
+      'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1200&q=80',
+    user: {
+      name: 'Ali Verson',
+      avatar:
+        'https://randomuser.me/api/portraits/men/11.jpg',
+    },
+    time: '2h ago',
+  },
+  {
+    id: '2',
+    image:
+      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1200&q=80',
+    user: {
+      name: 'Mitsu Toliner',
+      avatar:
+        'https://randomuser.me/api/portraits/women/22.jpg',
+    },
+    time: '1h ago',
+  },
+];
 
-  const renderItem = ({ item }) => (
-    <Image source={{ uri: item.url }} style={styles.image} />
-  );
+export default function ListOfCards({ data }) {
+  const normalised = useMemo(() => {
+    const src = Array.isArray(data) && data.length ? data : FALLBACK;
+    return src.map((it, i) => ({
+      id: it.id ?? String(i + 1),
+      image: it.image ?? it.url, 
+      user: it.user ?? null,
+      time: it.time ?? null,
+    }));
+  }, [data]);
 
   return (
-    <View style={styles.container}>
+    <View style={{ paddingVertical: 10 }}>
       <FlatList
-        data={cardList}
-        renderItem={renderItem}
+        data={normalised}
+        renderItem={({ item }) => <Card item={item} />}
         keyExtractor={(it) => String(it.id)}
         showsVerticalScrollIndicator={false}
       />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { paddingVertical: 10, paddingHorizontal: 20 },
-  image: {
-    width: '100%',
-    height: 288,
-    borderRadius: 28,
-    marginBottom: 32,
-  },
-});
