@@ -46,18 +46,19 @@ export default function ImageDetailsModal({ navigation, route }) {
       <View style={[styles.bg, { top: -360, left: -140 }]} />
       <View style={[styles.bg, { top: -200, left: -460 }]} />
 
-      <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row' }}>
+      <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row', paddingHorizontal: 16 }}>
         <Ionicons name="chevron-back-outline" size={30} color="#000000" />
         <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 18, marginTop: 3 }}>
           Go back
         </Text>
       </Pressable>
-
-      <Image
+    <View style={{ paddingHorizontal: 16, marginTop: 20, marginBottom: 25 }}>
+    <Image
         source={{ uri: payload.image }}
-        style={{ width: '100%', height: 288, marginTop: 20, borderRadius: 12 }}
+        style={{ width: '100%', height: 288, borderRadius: 15 }}
         resizeMode="cover"
-      />
+    />
+    </View>
 
       <View style={styles.statsRow}>
         <View style={styles.stat}>
@@ -76,53 +77,45 @@ export default function ImageDetailsModal({ navigation, route }) {
 
       <View style={styles.actionsRow}>
         <Pressable onPress={toggleLike}>
-          <Ionicons
-            name={isLiked ? 'heart' : 'heart-outline'}
-            size={40}
-            color="#000000"
-          />
+          <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={40} color="#000000" />
         </Pressable>
 
         <Pressable onPress={toggleSave}>
-          <Ionicons
-            name={isSaved ? 'bookmark' : 'bookmark-outline'}
-            size={40}
-            color="#000000"
-          />
+          <Ionicons name={isSaved ? 'bookmark' : 'bookmark-outline'} size={40} color="#000000" />
         </Pressable>
       </View>
     </SafeAreaView>
   );
 }
 
-    const styles = StyleSheet.create({
-    bg: {
-        width: 650,
-        height: 570,
-        borderRadius: 155,
-        borderWidth: 1,
-        borderColor: '#EFEFE2',
-        position: 'absolute',
-        transform: [{ rotate: '-.45deg' }],
-    },
-    statsRow: {
-        paddingHorizontal: 20,
-        marginTop: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-    },
-    stat: { alignItems: 'center' },
-    headerText: {
-        fontSize: 16,
-        fontFamily: 'Poppins_400Regular',
-    },
-    stats: {
-        fontSize: 25,
-        fontFamily: 'Poppins_700Bold',
-    },
-    actionsRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: 24,
-    },
-    });
+const styles = StyleSheet.create({
+  bg: {
+    width: 650,
+    height: 570,
+    borderRadius: 155,
+    borderWidth: 1,
+    borderColor: '#EFEFE2',
+    position: 'absolute',
+    transform: [{ rotate: '-.45deg' }],
+  },
+  statsRow: {
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+  },
+  stat: { alignItems: 'center' },
+  headerText: {
+    fontSize: 16,
+    fontFamily: 'Poppins_400Regular',
+  },
+  stats: {
+    fontSize: 25,
+    fontFamily: 'Poppins_700Bold',
+  },
+  actionsRow: {
+    paddingHorizontal: 20, 
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 24,
+  },
+});

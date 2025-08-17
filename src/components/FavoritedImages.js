@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, FlatList, Image, Text, useWindowDimensions } from 'react-native';
+import { View, FlatList, Image, Text, Pressable, useWindowDimensions } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
 
 export const FavoritedImages = () => {
+  const navigation = useNavigation();
   const saved = useSelector((state) => state.savedImages); 
   const { width } = useWindowDimensions();
 
@@ -20,14 +22,29 @@ export const FavoritedImages = () => {
 
   const renderItem = ({ item, index }) => {
     const uri = item.image || item.url;
+
+    const payload = {
+      id: item.id ?? String(uri),
+      image: uri,
+      url: uri,
+      user: item.user ?? null,
+      time: item.time ?? null,
+      likes: item.likes,
+      conversations: item.conversations,
+      followers: item.followers,
+    };
+
     return (
-      <View style={{ width: itemWidth, marginBottom: 16, marginRight: index % 2 === 0 ? gutter : 0 }}>
+      <Pressable
+        onPress={() => navigation.navigate('ImageDetailsModal', { imageItem: payload })}
+        style={{ width: itemWidth, marginBottom: 16, marginRight: index % 2 === 0 ? gutter : 0 }}
+      >
         <Image
           source={{ uri }}
           style={{ width: '100%', height: 130, borderRadius: 20 }}
           resizeMode="cover"
         />
-      </View>
+      </Pressable>
     );
   };
 
