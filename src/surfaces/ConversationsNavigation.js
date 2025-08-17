@@ -18,7 +18,7 @@ function ConversationsNavigation() {
           headerTintColor: '#000000',
           headerTransparent: true,
           headerTitleAlign: 'left',
-          headerStyle: { height: 120 },
+          headerStyle: { height: 160 },
           headerTitleStyle: {
             textAlign: 'left',
             fontWeight: 'bold',
@@ -28,20 +28,16 @@ function ConversationsNavigation() {
         }}
       >
         <Stack.Screen name="Conversations" component={Conversations} />
-        <Stack.Screen
+      <Stack.Screen
           name="Messages"
           component={Messages}
-          options={({ route }) => ({
-            title: route.params?.name ?? 'Messages',
-            headerTitleStyle: {
-              textAlign: 'center',
-              fontFamily: 'Poppins_400Regular',
-              fontSize: 20,
-              position: 'absolute',
-              top: 100,
-              left: 120,
-            },
-          })}
+          options={{
+            headerShown: true,           
+            headerTransparent: true,     
+            headerTitle: '',            
+            headerBackTitleVisible: false,
+            headerTintColor: '#000',
+          }}
         />
       </Stack.Navigator>
     </ConversationContext.Provider>
