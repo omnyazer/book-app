@@ -15,9 +15,11 @@ import store from './src/store';
 import Login from './src/surfaces/Login';
 import { Home } from './src/surfaces/Home';
 import ConversationsNavigation from './src/surfaces/ConversationsNavigation';
-import UserDetailsModal from './src/surfaces/UserDetailsModal'; 
-import { requestBase } from './src/constants';
+import UserDetailsModal from './src/surfaces/UserDetailsModal';
+import ImageDetailsModal from './src/surfaces/ImageDetailsModal';
 import { UserListContext } from './src/context';
+
+import localUsers from './src/data/users.json';
 
 const Stack = createStackNavigator();
 
@@ -31,24 +33,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function fetchUserData() {
-      try {
-        const res = await fetch(`${requestBase}/users.json`);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        if (!cancelled) setUserList(json);
-      } catch (e) {
-        console.warn('Failed to fetch users.json:', e?.message || e);
-        if (!cancelled) setUserList([]);
-      }
-    }
-
-    fetchUserData();
-    return () => {
-      cancelled = true;
-    };
+    setUserList(localUsers || []);
   }, []);
 
   if (!fontsLoaded || userList === null) {
@@ -79,10 +64,16 @@ export default function App() {
                     component={ConversationsNavigation}
                     options={{ headerShown: false }}
                   />
+
                   <Stack.Group screenOptions={{ presentation: 'modal' }}>
                     <Stack.Screen
                       name="UserDetailsModal"
                       component={UserDetailsModal}
+                      options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                      name="ImageDetailsModal"
+                      component={ImageDetailsModal}
                       options={{ headerShown: false }}
                     />
                   </Stack.Group>

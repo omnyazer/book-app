@@ -4,34 +4,40 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { likeImage, unlikeImage } from '../store/likedImages';
 
-export default function Card({ item }) {
+export default function Card({ item, navigation }) {
   const dispatch = useDispatch();
+  const liked = useSelector((state) => state.likedImages.some((it) => String(it.id) === String(item.id)));
 
-  const id = item.id ?? String(item.url ?? item.image);
-  const image = item.image ?? item.url;
-  const user = item.user ?? null;
-  const time = item.time ?? null;
-
-  const liked = useSelector(state => state.likedImages.some(it => it.id === id));
+  const payload = {
+    id: item.id ?? String(item.image || item.url),
+    image: item.image || item.url,
+    url: item.image || item.url, 
+    user: item.user ?? null,
+    time: item.time ?? null,
+  };
 
   const toggleLike = () => {
-    if (!image) return;
-    if (liked) dispatch(unlikeImage(id));
-    else dispatch(likeImage({ id, url: image, user, time }));
+    if (liked) dispatch(unlikeImage(payload.id));
+    else dispatch(likeImage(payload));
+  };
+
+  const openDetails = () => {
+    if (!navigation) return;
+    navigation.navigate('ImageDetailsModal', { imageItem: item });
   };
 
   return (
     <View style={{ marginBottom: 32 }}>
       <View style={{ position: 'relative' }}>
-        <Pressable onLongPress={toggleLike}>
+        <Pressable onPress={openDetails}>
           <Image
-            source={{ uri: image }}
+            source={{ uri: payload.image }}
             style={{ width: '100%', height: 288, borderRadius: 28 }}
             resizeMode="cover"
           />
         </Pressable>
 
-        {!!user && (
+        {item.user && (
           <View
             style={{
               position: 'absolute',
@@ -45,17 +51,13 @@ export default function Card({ item }) {
               borderRadius: 20,
             }}
           >
-            {!!user.avatar && (
-              <Image
-                source={{ uri: user.avatar }}
-                style={{ width: 28, height: 28, borderRadius: 14, marginRight: 8 }}
-              />
-            )}
+            <Image
+              source={{ uri: item.user.avatar }}
+              style={{ width: 28, height: 28, borderRadius: 14, marginRight: 8 }}
+            />
             <View style={{ gap: 2 }}>
-              {!!user.name && (
-                <Text style={{ fontWeight: '600', color: '#000' }}>{user.name}</Text>
-              )}
-              {!!time && <Text style={{ fontSize: 11, color: '#666' }}>{time}</Text>}
+              <Text style={{ fontWeight: '600', color: '#000' }}>{item.user.name}</Text>
+              {!!item.time && <Text style={{ fontSize: 11, color: '#666' }}>{item.time}</Text>}
             </View>
           </View>
         )}
@@ -76,11 +78,7 @@ export default function Card({ item }) {
             shadowRadius: 6,
           }}
         >
-          <Ionicons
-            name={liked ? 'heart' : 'heart-outline'}
-            size={22}
-            color={liked ? '#E11D48' : '#111'}
-          />
+          <Ionicons name={liked ? 'heart' : 'heart-outline'} size={22} color={liked ? '#E11D48' : '#111'} />
         </Pressable>
       </View>
     </View>

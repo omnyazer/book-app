@@ -1,48 +1,60 @@
 import React, { useContext } from 'react';
-import { View, FlatList, Image, Text, Pressable } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { View, FlatList, Pressable, Image, Text } from 'react-native';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 import { UserListContext } from '../context';
 
-const FALLBACK_USERS = [
-  { id: 1, name: 'Jakob Curtis', url: 'https://randomuser.me/api/portraits/men/11.jpg' },
-  { id: 2, name: 'Charlie Kelly', url: 'https://randomuser.me/api/portraits/men/32.jpg' },
-  { id: 3, name: 'Minna Amigon', url: 'https://randomuser.me/api/portraits/women/22.jpg' },
-  { id: 4, name: 'Donette Foller', url: 'https://randomuser.me/api/portraits/men/45.jpg' },
-];
-
 export default function ListOfAvatars() {
-  const { userList } = useContext(UserListContext);
-  const data = userList && userList.length ? userList : FALLBACK_USERS;
+  const navigation = useNavigation();
+  const { userList } = useContext(UserListContext) || { userList: [] };
 
-  const renderAdd = () => (
-    <View style={{ alignItems: 'center', marginHorizontal: 12 }}>
-      <LinearGradient
-        colors={['#FCE1E4', '#E1F6F4']}
-        style={{ width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' }}
-      >
-        <Text style={{ fontSize: 24, color: '#000' }}>+</Text>
-      </LinearGradient>
-    </View>
-  );
-
-  const renderItem = ({ item }) => (
-    <View style={{ alignItems: 'center', marginHorizontal: 12 }}>
-      <Image
-        source={{ uri: item.url }}
-        style={{ width: 52, height: 52, borderRadius: 26 }}
-      />
-    </View>
+  const renderItem = ({ item, index }) => (
+    <Pressable
+      onPress={() =>
+        navigation.navigate('UserDetailsModal', {
+          user: { name: item.name, url: item.url, seed: item.id ?? index },
+        })
+      }
+      style={{
+        width: 64, height: 64, borderRadius: 32, borderWidth: 1, borderColor: '#000',
+        justifyContent: 'center', alignItems: 'center', marginRight: 14, overflow: 'hidden',
+      }}
+    >
+      <Image source={{ uri: item.url }} style={{ width: '100%', height: '100%' }} />
+    </Pressable>
   );
 
   return (
-    <FlatList
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      data={data}
-      ListHeaderComponent={renderAdd}
-      keyExtractor={(it) => String(it.id)}
-      renderItem={renderItem}
-      contentContainerStyle={{ paddingHorizontal: 10 }}
-    />
+    <View
+      style={{
+        backgroundColor: '#fff',
+        paddingVertical: 12,
+        paddingHorizontal: 14,
+        borderRadius: 22,
+        marginHorizontal: 16,
+        marginBottom: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+      }}
+    >
+      <View
+        style={{
+          width: 64, height: 64, borderRadius: 32, marginRight: 14,
+          alignItems: 'center', justifyContent: 'center',
+          backgroundColor: '#EAF3EF',
+        }}
+      >
+        <Ionicons name="add" size={20} color="#000" />
+      </View>
+
+      <FlatList
+        data={userList}
+        keyExtractor={(it, i) => String(it?.id ?? i)}
+        renderItem={renderItem}
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingRight: 6 }}
+      />
+    </View>
   );
 }
