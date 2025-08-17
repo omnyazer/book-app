@@ -18,7 +18,7 @@ function ConversationsNavigation() {
           headerTintColor: '#000000',
           headerTransparent: true,
           headerTitleAlign: 'left',
-          headerStyle: { height: 160 },
+          headerStyle: { height: 120 },
           headerTitleStyle: {
             textAlign: 'left',
             fontWeight: 'bold',

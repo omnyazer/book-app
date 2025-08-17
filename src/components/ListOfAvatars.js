@@ -1,26 +1,61 @@
-import React, { useContext } from 'react';
-import { View, FlatList, Pressable, Image, Text } from 'react-native';
+import React, { useContext, useMemo } from 'react';
+import { View, FlatList, Pressable, Image } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { UserListContext } from '../context';
+
+const storyFor = (seed) =>
+  `https://picsum.photos/seed/user-${encodeURIComponent(String(seed))}/900/1200`;
 
 export default function ListOfAvatars() {
   const navigation = useNavigation();
   const { userList } = useContext(UserListContext) || { userList: [] };
 
-  const renderItem = ({ item, index }) => (
+  const data = useMemo(
+    () =>
+      (userList || []).map((u, i) => ({
+        id: u.id ?? i + 1,
+        name: u.name,
+        avatar: u.url || u.avatar, 
+        storyUrl: storyFor(u.id ?? i + 1),
+      })),
+    [userList]
+  );
+
+  const renderItem = ({ item }) => (
     <Pressable
       onPress={() =>
         navigation.navigate('UserDetailsModal', {
-          user: { name: item.name, url: item.url, seed: item.id ?? index },
+          user: { name: item.name, avatar: item.avatar },
+          mode: 'story',
+          image: item.storyUrl,
         })
       }
       style={{
-        width: 64, height: 64, borderRadius: 32, borderWidth: 1, borderColor: '#000',
-        justifyContent: 'center', alignItems: 'center', marginRight: 14, overflow: 'hidden',
+        width: 64,
+        height: 64,
+        borderRadius: 32,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 14,
       }}
     >
-      <Image source={{ uri: item.url }} style={{ width: '100%', height: '100%' }} />
+      <View
+        style={{
+          width: 64,
+          height: 64,
+          borderRadius: 32,
+          borderWidth: 2,
+          borderColor: '#0ea5e9', 
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Image
+          source={{ uri: item.avatar }}
+          style={{ width: 58, height: 58, borderRadius: 29 }}
+        />
+      </View>
     </Pressable>
   );
 
@@ -39,8 +74,12 @@ export default function ListOfAvatars() {
     >
       <View
         style={{
-          width: 64, height: 64, borderRadius: 32, marginRight: 14,
-          alignItems: 'center', justifyContent: 'center',
+          width: 64,
+          height: 64,
+          borderRadius: 32,
+          marginRight: 14,
+          alignItems: 'center',
+          justifyContent: 'center',
           backgroundColor: '#EAF3EF',
         }}
       >
@@ -48,8 +87,8 @@ export default function ListOfAvatars() {
       </View>
 
       <FlatList
-        data={userList}
-        keyExtractor={(it, i) => String(it?.id ?? i)}
+        data={data}
+        keyExtractor={(it) => String(it.id)}
         renderItem={renderItem}
         horizontal
         showsHorizontalScrollIndicator={false}

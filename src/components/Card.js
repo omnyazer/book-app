@@ -6,7 +6,9 @@ import { likeImage, unlikeImage } from '../store/likedImages';
 
 export default function Card({ item, navigation }) {
   const dispatch = useDispatch();
-  const liked = useSelector((state) => state.likedImages.some((it) => String(it.id) === String(item.id)));
+  const liked = useSelector((state) =>
+    state.likedImages.some((it) => String(it.id) === String(item.id))
+  );
 
   const payload = {
     id: item.id ?? String(item.image || item.url),
@@ -23,7 +25,7 @@ export default function Card({ item, navigation }) {
 
   const openDetails = () => {
     if (!navigation) return;
-    navigation.navigate('ImageDetailsModal', { imageItem: item });
+    navigation.navigate('ImageDetailsModal', { imageItem: payload });
   };
 
   return (
@@ -37,7 +39,7 @@ export default function Card({ item, navigation }) {
           />
         </Pressable>
 
-        {item.user && (
+        {payload.user && (
           <View
             style={{
               position: 'absolute',
@@ -52,12 +54,16 @@ export default function Card({ item, navigation }) {
             }}
           >
             <Image
-              source={{ uri: item.user.avatar }}
+              source={{ uri: payload.user.avatar }}
               style={{ width: 28, height: 28, borderRadius: 14, marginRight: 8 }}
             />
             <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: '600', color: '#000' }}>{item.user.name}</Text>
-              {!!item.time && <Text style={{ fontSize: 11, color: '#666' }}>{item.time}</Text>}
+              <Text style={{ fontWeight: '600', color: '#000' }}>
+                {payload.user.name}
+              </Text>
+              {!!payload.time && (
+                <Text style={{ fontSize: 11, color: '#666' }}>{payload.time}</Text>
+              )}
             </View>
           </View>
         )}
@@ -78,7 +84,11 @@ export default function Card({ item, navigation }) {
             shadowRadius: 6,
           }}
         >
-          <Ionicons name={liked ? 'heart' : 'heart-outline'} size={22} color={liked ? '#E11D48' : '#111'} />
+          <Ionicons
+            name={liked ? 'heart' : 'heart-outline'}
+            size={22}
+            color={liked ? '#E11D48' : '#111'}
+          />
         </Pressable>
       </View>
     </View>

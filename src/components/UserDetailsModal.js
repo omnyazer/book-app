@@ -1,84 +1,132 @@
-import React, { useMemo } from 'react';
-import { View, FlatList, Image, Text, Pressable } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import React from 'react';
+import { View, Text, Image, Pressable } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-const IMAGES_SETS = [
-  [
-    'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200',
-    'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?q=80&w=1200',
-    'https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=1200',
-  ],
-  [
-    'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1200',
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200',
-    'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?q=80&w=1200',
-  ],
-  [
-    'https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1200',
-    'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?q=80&w=1200',
-    'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=1200',
-  ],
-];
-
 export default function UserDetailsModal({ navigation, route }) {
-  const insets = useSafeAreaInsets();
-  const user = route?.params?.user ?? { name: 'User', url: undefined, seed: 0 };
+  const p = route?.params ?? {};
 
-  const seed = Number(user?.seed ?? 0);
-  const images = useMemo(
-    () => IMAGES_SETS[seed % IMAGES_SETS.length],
-    [seed]
-  );
+  const isStory =
+    !!p.story ||
+    p.mode === 'story' ||
+    p.showStats === false ||
+    (!!p.user && !p.stats && p.showStats !== true);
 
-  const renderItem = ({ item }) => (
-    <Image
-      source={{ uri: item }}
-      style={{
-        width: '85%',
-        height: 420,
-        alignSelf: 'center',
-        borderRadius: 22,
-        marginVertical: 14,
-      }}
-      resizeMode="cover"
-    />
-  );
+  const name =
+    p?.user?.name ??
+    p?.user?.username ??
+    p?.user?.login ??
+    p?.name ??
+    'User';
 
-  return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F6F8F9', paddingTop: insets.top + 4 }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginBottom: 8 }}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={{ flexDirection: 'row', alignItems: 'center', marginRight: 10 }}
-          hitSlop={8}
-        >
-          <Ionicons name="chevron-back-outline" size={28} color="#000" />
-          <Text style={{ fontSize: 14, marginLeft: 2 }}>Go back</Text>
+  const avatar =
+    p?.user?.avatar ||
+    p?.user?.url ||
+    p?.user?.uri ||
+    p?.avatar ||
+    p?.url;
+
+  const storyImage =
+    p?.storyUrl ||
+    p?.imageItem?.image ||
+    p?.imageItem?.url ||
+    p?.image ||
+    p?.url;
+
+  if (isStory) {
+    return (
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#F0FBF9' }}>
+        <View
+          style={{
+            position: 'absolute', width: 650, height: 570, borderRadius: 155,
+            borderWidth: 1, borderColor: '#E1F6F4', transform: [{ rotate: '-.45deg' }],
+            top: 90, left: -360, opacity: 0.7,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute', width: 650, height: 570, borderRadius: 155,
+            borderWidth: 1, borderColor: '#E1F6F4', transform: [{ rotate: '-.45deg' }],
+            top: 200, left: -410, opacity: 0.7,
+          }}
+        />
+
+        <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row', paddingTop: 12, paddingLeft: 16 }}>
+          <Ionicons name="chevron-back-outline" size={26} color="#000" />
+          <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 16, marginLeft: 4 }}>Go back</Text>
         </Pressable>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 8 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginTop: 6 }}>
           <View
             style={{
-              width: 44, height: 44, borderRadius: 22, overflow: 'hidden',
-              borderWidth: 1, borderColor: '#000', marginRight: 10,
+              width: 56, height: 56, borderRadius: 18, borderColor: '#000', borderWidth: 1,
+              overflow: 'hidden', marginRight: 12,
             }}
           >
-            {!!user?.url && (
-              <Image source={{ uri: user.url }} style={{ width: '100%', height: '100%' }} />
+            {avatar ? (
+              <Image source={{ uri: avatar }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+            ) : (
+              <View style={{ flex: 1, backgroundColor: '#E1F6F4', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="person" size={28} color="#000" />
+              </View>
             )}
           </View>
-          <Text style={{ fontFamily: 'Poppins_700Bold', fontSize: 18 }}>{user?.name ?? 'User'}</Text>
+          <Text style={{ fontFamily: 'Poppins_700Bold', fontSize: 18 }}>{name}</Text>
         </View>
+
+        <View style={{ alignItems: 'center', marginTop: 14, paddingHorizontal: 16 }}>
+          {storyImage ? (
+            <Image
+              source={{ uri: `${storyImage}?w=900&auto=format&fit=crop&q=70` }}
+              style={{ width: '90%', aspectRatio: 3 / 4, borderRadius: 22 }}
+              resizeMode="cover"
+            />
+          ) : (
+            <View
+              style={{ width: '90%', aspectRatio: 3 / 4, borderRadius: 22, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Text>Aucune image</Text>
+            </View>
+          )}
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+      <Pressable onPress={() => navigation.goBack()} style={{ flexDirection: 'row', paddingTop: 12, paddingLeft: 16 }}>
+        <Ionicons name="chevron-back-outline" size={26} color="#000" />
+        <Text style={{ fontFamily: 'Poppins_400Regular', fontSize: 16, marginLeft: 4 }}>Go back</Text>
+      </Pressable>
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, marginTop: 6 }}>
+        <View
+          style={{
+            width: 56, height: 56, borderRadius: 18, borderColor: '#000', borderWidth: 1,
+            overflow: 'hidden', marginRight: 12,
+          }}
+        >
+          {avatar ? (
+            <Image source={{ uri: avatar }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+          ) : (
+            <View style={{ flex: 1, backgroundColor: '#E1F6F4', alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="person" size={28} color="#000" />
+            </View>
+          )}
+        </View>
+        <Text style={{ fontFamily: 'Poppins_700Bold', fontSize: 18 }}>{name}</Text>
       </View>
 
-      <FlatList
-        data={images}
-        keyExtractor={(uri, i) => `${i}-${uri}`}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 26 }}
-        showsVerticalScrollIndicator={false}
-      />
+      <View style={{ marginTop: 12, paddingHorizontal: 16 }}>
+        {storyImage ? (
+          <Image
+            source={{ uri: `${storyImage}?w=1200&auto=format&fit=crop&q=75` }}
+            style={{ width: '100%', height: 260, borderRadius: 18 }}
+            resizeMode="cover"
+          />
+        ) : null}
+      </View>
     </SafeAreaView>
   );
 }

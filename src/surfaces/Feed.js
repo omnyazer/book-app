@@ -7,12 +7,23 @@ import ListOfCards from '../components/ListOfCards';
 export default function Feed() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#F4F5F7' }}>
-      <Text style={{ fontSize: 24, fontWeight: '700', margin: 16 }}>Feed</Text>
+      <Text
+        style={{
+          fontSize: 24,
+          fontWeight: '700',
+          marginTop: 46,
+          marginLeft: 26,
+        }}
+      >
+        Feed
+      </Text>
+
       <View
         style={{
           backgroundColor: '#fff',
           marginHorizontal: 16,
-          marginBottom: 16,
+          marginBottom: 22,
+          marginTop: 25,
           paddingVertical: 14,
           borderRadius: 18,
           shadowColor: '#000',
@@ -24,7 +35,10 @@ export default function Feed() {
       >
         <ListOfAvatars />
       </View>
-      <ListOfCards />
+
+      <View style={{ paddingHorizontal: 26 }}>
+        <ListOfCards />
+      </View>
     </SafeAreaView>
   );
 }
